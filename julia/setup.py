@@ -10,8 +10,6 @@ from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Distutils import build_ext
 
-import numpy as np
-
 extra_args = []
 # Comment/Uncomment the following line to disable/enable OpenMP for GCC-ish
 # compilers.
@@ -32,5 +30,4 @@ exts = [Extension("julia_cython",
 setup(
     cmdclass = {'build_ext': build_ext},
     ext_modules = exts,
-    include_dirs = [np.get_include()],
 )

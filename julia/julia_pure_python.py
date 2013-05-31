@@ -21,16 +21,16 @@ def kernel(z, c, lim, cutoff=1e6):
     return count
 
 
-def compute_julia(c, N, bound=2, lim=1000., kernel=kernel):
+def compute_julia(cr, ci, N, bound=1.5, lim=1000., cutoff=1e6, kernel=kernel):
     ''' Pure Python calculation of the Julia set for a given `c`.  No NumPy
     array operations are used.
     '''
     julia = np.empty((N, N), dtype=np.uint32)
     grid_x = np.linspace(-bound, bound, N)
     grid_y = grid_x * 1j
-    c = complex(c)
+    c = cr + 1j * ci
     t0 = time()
     for i, x in enumerate(grid_x):
         for j, y in enumerate(grid_y):
-            julia[i,j] = kernel(x+y, c, lim)
+            julia[i,j] = kernel(x+y, c, lim, cutoff=cutoff)
     return julia, time() - t0
