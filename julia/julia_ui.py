@@ -1,9 +1,9 @@
 # --- Imports
 import numpy as np
 
-from traits.api import HasTraits, Float, Instance, Array, on_trait_change, DelegatesTo, Property, Complex, Int
-from traitsui.api import View, Item, RangeEditor
-from chaco.api import Plot, ArrayPlotData, jet
+from traits.api import HasTraits, Float, Instance, Array, on_trait_change, DelegatesTo, Property, Int
+from traitsui.api import View, Item, RangeEditor, Controller
+from chaco.api import Plot, ArrayPlotData, jet, OrRd
 from enable.api import ComponentEditor
 
 from subprocess import check_call
@@ -44,39 +44,36 @@ class Julia(HasTraits):
         return np.log(julia)
 
 
-class JuliaUI(HasTraits):
+class JuliaUI(Controller):
     
     model = Instance(Julia)
     runtime = Property(depends_on=['model.runtime'])
-    cr = DelegatesTo('model')
-    ci = DelegatesTo('model')
-    resolution = DelegatesTo('model')
-    julia = DelegatesTo('model')
-    
     plot = Instance(Plot)
     
-    traits_view = View(Item('plot', editor=ComponentEditor(), show_label=False),
+    traits_view = View(Item('controller.plot', editor=ComponentEditor(), show_label=False),
                        Item('resolution', editor=RangeEditor(low=100, high=1000, mode='slider')),
                        Item('cr', editor=RangeEditor(low=-2.0, high=2.0)),
                        Item('ci', editor=RangeEditor(low=-2.0, high=2.0)),
-                       Item('runtime', style='readonly', show_label=False),
+                       Item('controller.runtime', style='readonly', show_label=False),
                        width=800, height=900, resizable=True,
                        title="Julia Set Explorer")
     
+    @on_trait_change('model.runtime')
     def _get_runtime(self):
         return "Compute time: {:d} ms".format(int(round(self.model.runtime * 1000)))
     
-    def _julia_changed(self):
+    @on_trait_change('model.julia')
+    def update_julia(self):
         self.plot.data.set_data('julia', self.model.julia)
     
     def _plot_default(self):
-        julia = self.julia
+        julia = self.model.julia
         apd = ArrayPlotData(julia=julia[:-1,:-1])
-        grid = np.linspace(-2, 2, self.resolution-1)
+        grid = np.linspace(-2, 2, self.model.resolution-1)
         X, Y = np.meshgrid(grid, grid)
         plot = Plot(apd)
         plot.aspect_ratio = 1.0
-        plot.img_plot("julia", xbounds=X, ybounds=Y, colormap=jet, interpolation='bicubic')
+        plot.img_plot("julia", xbounds=X, ybounds=Y, colormap=OrRd, interpolation='bicubic')
         return plot
         
 if __name__ == '__main__':
