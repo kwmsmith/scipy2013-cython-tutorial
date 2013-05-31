@@ -1,0 +1,64 @@
+cimport cython
+from libcpp.vector cimport vector
+from cython.operator cimport dereference as deref
+
+cdef extern from "particle_tmpl.h":
+
+    cdef cppclass _Particle "Particle"[T]:
+        _Particle()
+        _Particle(T, T, T, T, T, T, T, T)
+        const T get_speed()
+        const T get_x()
+
+{% for floating in floatings %}
+    const {{floating}} _norm2 "norm2"({{floating}} x, {{floating}} y, {{floating}} z)
+    {{floating}} _rms_speeds "rms_speeds"(vector[const _Particle[{{floating}}]*] *particles)
+{% endfor %}
+
+# depend on type conversion rules to handle this case...
+def norm2(double x, double y, double z):
+    cdef double pn = _norm2(x, y, z)
+    return pn
+
+{% for floating in floatings %}
+cdef class Particle_{{floating}}:
+    template_type = "{{floating}}"
+    cdef _Particle[{{floating}}] *_thisptr
+    def __cinit__(self, x, y, z, vx, vy, vz, mass, charge):
+        self._thisptr = new _Particle[{{floating}}](x, y, z, vx, vy, vz, mass, charge)
+    cpdef {{floating}} get_x(self):
+        return self._thisptr.get_x()
+    def __dealloc__(self):
+        del self._thisptr
+
+cpdef {{floating}} rms_speeds_{{floating}}(particles) except *:
+
+    cdef:
+        vector[const _Particle[{{floating}}] *] vparticles
+        _Particle[{{floating}}] *part
+
+    for particle in particles:
+        if not isinstance(particle, Particle_{{floating}}):
+            raise TypeError("object %r is not an instance of Particle." % particle)
+        part = (<Particle_{{floating}}>particle)._thisptr
+        vparticles.push_back(part)
+
+    return _rms_speeds(&vparticles)
+{% endfor %}
+
+def Particle(*args, dtype='f'):
+    type_dict = {
+            {% for floating in floatings -%}
+            '{{floating[0]}}': Particle_{{floating}},
+            {% endfor -%}
+            }
+    return type_dict[dtype](*args)
+
+def rms_speeds(particles):
+    type_dict = {
+            {% for floating in floatings -%}
+            '{{floating}}': rms_speeds_{{floating}},
+            {% endfor -%}
+            }
+    tp = particles[0].template_type
+    return type_dict[tp](particles)
