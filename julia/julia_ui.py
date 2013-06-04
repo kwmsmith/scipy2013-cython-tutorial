@@ -9,7 +9,7 @@ from enable.api import ComponentEditor
 
 from subprocess import check_call
 
-colormaps = sorted(default_colormaps.color_map_name_dict.keys())
+colormaps = sorted(default_colormaps.color_map_name_dict.keys(), key=lambda x: x.lower())
 for boring in 'hot bone gray yarg gist_gray gist_yarg Greys'.split():
     colormaps.remove(boring)
 colormaps = ['hot'] + colormaps
