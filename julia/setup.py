@@ -18,14 +18,12 @@ extra_args = ["-fopenmp"]
 exts = [Extension("julia_cython", 
                   ["julia_cython.pyx"],
                   extra_compile_args=extra_args,
-                  extra_link_args=extra_args,
-                  ),
+                  extra_link_args=extra_args),
         Extension("julia_cython_solution",
                   ["julia_cython_solution.pyx"],
                   extra_compile_args=extra_args,
                   extra_link_args=extra_args),
         ]
-
 
 setup(
     cmdclass = {'build_ext': build_ext},

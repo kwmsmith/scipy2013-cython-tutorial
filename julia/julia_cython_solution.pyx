@@ -13,11 +13,10 @@ import numpy as np
 
 # --- Cython cimports --------------------------------------------------------
 cimport cython
-from cython.parallel cimport prange
 from libc.stdint cimport uint32_t, int32_t
+from cython.parallel cimport prange
 
 # --- Ctypedefs --------------------------------------------------------
-
 ctypedef float     real_t
 ctypedef uint32_t  uint_t
 ctypedef int32_t   int_t
@@ -29,18 +28,19 @@ cdef inline real_t abs_sq(real_t zr, real_t zi) nogil:
     return zr * zr + zi * zi
 
 cdef uint_t kernel(real_t zr, real_t zi,
-                    real_t cr, real_t ci,
-                    real_t lim,
-                    real_t cutoff=1e6) nogil:
+                   real_t cr, real_t ci,
+                   real_t lim, real_t cutoff) nogil:
     ''' Cython implementation of the kernel computation.
 
     This is implemented so that no C-API calls are made inside the function
     body.  Even still, there is some overhead as compared with a pure C
     implementation.
+
     '''
     cdef:
         uint_t count = 0
         real_t lim_sq = lim * lim
+        
     while abs_sq(zr, zi) < lim_sq and count < cutoff:
         zr, zi = zr * zr - zi * zi + cr, 2 * zr * zi + ci
         count += 1
@@ -49,17 +49,14 @@ cdef uint_t kernel(real_t zr, real_t zi,
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def compute_julia(real_t cr, real_t ci,
-                  uint32_t N,
-                  real_t bound=1.5,
-                  real_t lim=1000.,
-                  real_t cutoff=1e6):
+                  uint32_t N, real_t bound=1.5,
+                  real_t lim=1000., real_t cutoff=1e6):
     ''' 
     Cythonized version of a pure Python implementation of the compute_julia()
     function.  It uses numpy arrays, but does not use any extra syntax to speed
     things up beyond simple type declarations.
 
     '''
-    
     cdef:
         uint_t[:,::1] julia 
         real_t[::1] grid
@@ -79,17 +76,14 @@ def compute_julia(real_t cr, real_t ci,
 @cython.boundscheck(False)
 @cython.wraparound(False)
 def compute_julia_parallel(real_t cr, real_t ci,
-                           uint_t N,
-                           real_t bound=1.5,
-                           real_t lim=1000.,
-                           real_t cutoff=1e6):
+                           uint_t N, real_t bound=1.5,
+                           real_t lim=1000., real_t cutoff=1e6):
     '''
     Cython `compute_julia()` implementation with Numpy array buffer
     declarations and appropriate compiler directives.  The body of this
     function is nearly identical to the `compute_julia_no_opt()` function.
 
     '''
-
     cdef:
         uint_t[:,::1] julia 
         real_t[::1] grid

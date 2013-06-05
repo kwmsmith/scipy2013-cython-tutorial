@@ -10,7 +10,7 @@
 import numpy as np
 from time import time
 
-def kernel(z, c, lim, cutoff=1e6):
+def kernel(z, c, lim, cutoff):
     ''' Computes the number, `n`, of iterations necessary such that 
     |z_n| > `lim`, where `z_n = z_{n-1}**2 + c`.
     '''
