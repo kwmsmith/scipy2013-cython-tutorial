@@ -13,5 +13,8 @@ def compiler(setup_name):
 def importer(module_name, function_name):
     for ending in ('.py', '.pyc', '.so', '.pyd'):
         module_name = module_name.rsplit(ending)[0]
-    return getattr(__import__(module_name), function_name)
-
+    mod = __import__(module_name)
+    try:
+        return getattr(mod, function_name)
+    except AttributeError:
+        raise ImportError("cannot import name %s" % function_name)
