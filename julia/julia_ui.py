@@ -95,7 +95,8 @@ class JuliaUI(Controller):
 # --- main entry point -------------------------------------------------------
             
 def main(args):
-    if args.module.endswith('.so') or args.module.endswith('.pyd'):
+    suffix = args.module.rsplit('.', 1)[-1]
+    if suffix in ('so', 'pyd', 'pyx'):
         utils.compiler(args.setup)
     compute_julia = utils.importer(args.module, args.function)
     julia = Julia(compute_julia=compute_julia)
