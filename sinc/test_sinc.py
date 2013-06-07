@@ -1,3 +1,4 @@
+from __future__ import print_function
 import timeit
 import numpy as np
 
@@ -34,16 +35,16 @@ def main(args):
     if sinc_cython:
         all_cython_time = timeit.timeit('sinc_cython(arr)', 'from __main__ import sinc_cython,arr', number=ncalls)
 
-    print "*" * 50
-    print "Number of repetitions: {}".format(ncalls)
-    print "array size           : {}".format(10000)
-    print "Pure-python kernel   : {:.3f}s".format(pytime, ncalls)
-    print "Cython kernel        : {:.3f}s".format(cython_time, ncalls)
-    print "Speedup              : {:.1f}".format(pytime / cython_time)
+    print("*" * 50)
+    print("Number of repetitions: {}".format(ncalls))
+    print( "array size           : {}".format(10000))
+    print("Pure-python kernel   : {:.3f}s".format(pytime, ncalls))
+    print("Cython kernel        : {:.3f}s".format(cython_time, ncalls))
+    print("Speedup              : {:.1f}".format(pytime / cython_time))
     if sinc_cython:
-        print "All Cython           : {:.3f}s".format(all_cython_time, ncalls)
-        print "Speedup              : {:.1f}".format(cython_time / all_cython_time)
-    print "*" * 50
+        print("All Cython           : {:.3f}s".format(all_cython_time, ncalls))
+        print("Speedup              : {:.1f}".format(cython_time / all_cython_time))
+    print("*" * 50)
 
 
 if __name__ == '__main__':
