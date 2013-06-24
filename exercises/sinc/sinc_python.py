@@ -1,6 +1,6 @@
-from libc.math cimport sin
+from math import sin
 
-cpdef double sinc_kernel(double x):
+def sinc_kernel(x):
     if -0.01 < x < 0.01:
         return 1.0
     return sin(x) / x
