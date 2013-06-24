@@ -1,11 +1,9 @@
 Julia Cython
 ------------
 
-This exercise provides practice at writing a C extension module
-using Cython.   The object of this is to take an existing Python
-module and speed it up by re-writing it in Cython.
-
-The code in this script computes the Julia set, but it is not very fast.
+This exercise provides practice at writing a C extension module using Cython.
+The object of this is to take an existing Python module `julia_pure_python.py`
+and speed it up by re-writing it in Cython.
 
 1. The file `julia_pure_python.py` calculates the Julia set in pure Python. 
    To time it, run the following::
@@ -32,11 +30,11 @@ The code in this script computes the Julia set, but it is not very fast.
       python julia_ui.py julia_cython.pyx
   
 3. Add variable typing for the scalar variables in the julia_cython.pyx file.
-   See how much of a speed-up you get.
+   See how much of a speed-up you get.  See the slide material for reference.
 
 4. Turn the `kernel` function into a C only function.
 
-5. Use typed memoryviews to further optimize the numpy arrays.
+5. Use typed memoryviews to further improve performance.
 
 Bonus
 ~~~~~
