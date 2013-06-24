@@ -30,4 +30,3 @@ def compute_julia(cr, ci, N, bound=1.5, lim=4., cutoff=1e6):
         julia[np.logical_not(julia)] = count
     np.seterr(**orig_err)
     return julia, time() - t0
-
