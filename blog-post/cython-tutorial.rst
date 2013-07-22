@@ -88,7 +88,8 @@ I will be giving a Cython webinar to cover some of the topics that were
 skipped during the SciPy tutorial.  I will likely cover typed memoryviews in
 more depth, and perhaps give more detail on getting Cython to work with modern
 Fortran and templated C++.  If you have a subscription to Enthought Canopy,
-you will receive a notification for the webinar, so stay tuned.
+you will receive a notification for the webinar, so stay tuned. Or sign up for an
+Enthought account [account] to get a notification.
 
 
 .. [tut] http://conference.scipy.org/scipy2013/tutorial_detail.php?id=105
@@ -100,3 +101,5 @@ you will receive a notification for the webinar, so stay tuned.
 .. [memviews] http://docs.cython.org/src/userguide/memoryviews.html
 
 .. [3118] http://www.python.org/dev/peps/pep-3118/
+
+.. [account] https://staging.enthought.com/accounts/register/
