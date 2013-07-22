@@ -12,7 +12,7 @@ download the tutorial slides, exercises, and demos [content]_, and follow
 along with the videos [tut]_.  Please read the setup instructions on the
 tutorial description.  The easiest way to satisfy the requirements for the
 tutorial is to download and install an existing scientific Python
-distribution, such as Enthought's Canopy.  You will need Cython version 0.19
+distribution, such as Enthought's Canopy [canopy]_.  You will need Cython version 0.19
 or greater.
 
 Tutorial Highlights
@@ -23,12 +23,12 @@ objective of improving Python's performance; it is a compiler (the `cython`
 command) for generating Python extension modules; and it helps wrap C and C++
 libraries in a nice and Pythonic way with a minimum of overhead.  These three
 aspects of Cython are of course tightly integrated with each other and
-shouldn't necessarily be thought about in isolation: is it common to have
+shouldn't necessarily be thought about in isolation: it is common to have
 Cython code that is intended to both speed up a pure-Python algorithm and that
 also calls out to Cython-wrapped C or C++ libraries.
 
-As compared with some of the newer Python JIT compilers that are on the rise,
-Cython is relatively mature -- not SWIG mature, but it has certainly been
+Compared with some of the newer Python JIT compilers that are on the rise,
+Cython is relatively mature -- not SWIG mature, but it certainly has been
 around long enough that it has grown features beyond its core functionality:
 annotated source files for compile-time performance profiling, runtime
 profiling that integrates with Python's profilers, cross-language debugging
@@ -41,7 +41,7 @@ capabilities which help make Cython easier to use.
 The tutorial was in the advanced track because I wanted to dive into newer and
 more advanced Cython features, especially typed memoryviews [memviews]_.
 Typed memoryviews are Cython's interface to PEP-3118 [3118]_ buffers, the new
-buffer protocol, which is a protocol for accessing and passing around
+buffer protocol for accessing and passing around
 (possibly strided) blobs of memory without copies.  This is, of course, of
 considerable interest to scientific computing audiences for whom non-copying
 array operations are essential.  NumPy arrays support this protocol, and are
@@ -59,10 +59,10 @@ and use, and they do not have any external dependencies (i.e., you do not have
 to `cimport` anything to use them, and you do not have to add extra include
 flags when compiling).
 
-Another advanced topic touched on in the tutorial was wrapping templated C++
+Another advanced topic I touched on in the tutorial was wrapping templated C++
 classes.  Cython's syntax for wrapping templated C++ is fairly easy to work
-with if wrapping just one template instantiation.  Once you need to wrap
-several template instantiations, it is recommended to use a code generation
+with if you are wrapping just one template instantiation.  Once you need to wrap
+several template instantiations, I recommend you use a code generation
 tool like cheetah or jinja2 to avoid manual code duplication.  It is often
 helpful to provide a top-level wrapper class for a more Pythonic experience.
 Examples of this approach are in the tutorial material zip file.  Cython's
